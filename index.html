@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top" />
+    <?!= include('css'); ?>
+  </head>
+  <body>
+    <div id="loading">Loading data from spreadsheet...</div>
+
+    <!-- SCREEN 1: Select Coach -->
+    <div id="screen-coach" class="screen">
+      <h2>Welcome Coach</h2>
+      <label for="coachSelect">Select your name:</label>
+      <select id="coachSelect">
+        <option value="">-- Select Coach --</option>
+      </select>
+      <button onclick="startAttendance()">Take Attendance</button>
+    </div>
+
+    <!-- SCREEN 2: Take Attendance -->
+    <div id="screen-attendance" class="screen">
+      <h2>Take Attendance</h2>
+      <label for="attendanceDate">Date:</label>
+      <input type="date" id="attendanceDate" />
+
+      <div class="filters">
+        <div>
+          <label for="levelFilter">Level:</label>
+          <select id="levelFilter" onchange="renderAthleteList()">
+            <option value="All">All Levels</option>
+          </select>
+        </div>
+        <div>
+          <label for="nameSearch">Search:</label>
+          <input
+            type="text"
+            id="nameSearch"
+            placeholder="Name..."
+            onkeyup="renderAthleteList()"
+          />
+        </div>
+      </div>
+
+      <div
+        id="athleteList"
+        style="
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          max-height: 300px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Athletes will be injected here -->
+      </div>
+
+      <!-- NEW BUTTONS HERE -->
+      <div style="display: flex; gap: 10px; margin-bottom: 15px">
+        <button class="secondary" onclick="markAll()" style="margin-bottom: 0">
+          Mark All
+        </button>
+        <button
+          class="secondary"
+          onclick="clearSelection()"
+          style="margin-bottom: 0"
+        >
+          Clear Selection
+        </button>
+      </div>
+      <!-- END NEW BUTTONS -->
+
+      <button onclick="addToRoster()">Add Selected to Roster</button>
+      <button class="secondary" onclick="goToReview()">
+        Review Attendance (<span id="rosterCount">0</span>)
+      </button>
+    </div>
+
+    <!-- SCREEN 3: Review & Submit -->
+    <div id="screen-review" class="screen">
+      <h2>Review Attendance</h2>
+      <p><strong>Coach:</strong> <span id="reviewCoach"></span></p>
+      <p><strong>Date:</strong> <span id="reviewDate"></span></p>
+
+      <div
+        id="reviewList"
+        style="
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          max-height: 300px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Selected athletes will be injected here -->
+      </div>
+
+      <button onclick="submitData()" id="submitBtn">Submit Attendance</button>
+      <button class="secondary" onclick="backToAttendance()">
+        Back to Selection
+      </button>
+    </div>
+    <?!= include('javascript'); ?>
+  </body>
+</html>
+

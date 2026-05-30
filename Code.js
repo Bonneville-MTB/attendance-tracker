@@ -1,0 +1,111 @@
+function doGet() {
+  return HtmlService.createTemplateFromFile("index")
+    .evaluate()
+    .setTitle("MTB Attendance Tracker")
+    .addMetaTag("viewport", "width=device-width, initial-scale=1"); // Ensures mobile responsiveness
+}
+
+// Helper function to include separate HTML/JS files
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+}
+
+function getInitialData() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Fetch Coaches
+  var coachSheet = ss.getSheetByName("Coaches");
+  var coachData = coachSheet
+    .getRange(2, 1, coachSheet.getLastRow() - 1, 2)
+    .getValues();
+  var coaches = coachData
+    .map(function (row) {
+      return { name: row[0], defaultGroup: row[1] };
+    })
+    .filter(function (c) {
+      return c.name !== "";
+    });
+
+  // Fetch Athletes
+  var athleteSheet = ss.getSheetByName("Athletes");
+  var athleteData = athleteSheet
+    .getRange(2, 1, athleteSheet.getLastRow() - 1, 2)
+    .getValues();
+  var athletes = athleteData
+    .map(function (row) {
+      return { name: row[0], level: row[1] };
+    })
+    .filter(function (a) {
+      return a.name !== "";
+    });
+
+  // Get unique levels for the dropdown filter
+  var levels = [...new Set(athletes.map((a) => a.level))].filter(Boolean);
+
+  return {
+    coaches: coaches,
+    athletes: athletes,
+    levels: levels,
+  };
+}
+
+function submitAttendance(records) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Attendance");
+  var timezone = ss.getSpreadsheetTimeZone();
+
+  // 1. Get existing data to check for duplicates
+  var lastRow = sheet.getLastRow();
+  var existingData = [];
+  if (lastRow > 1) {
+    // Assuming row 1 has headers
+    // Get Date, Player Name, and Coach (Columns A, B, C)
+    existingData = sheet.getRange(2, 1, lastRow - 1, 3).getValues();
+  }
+
+  // 2. Create a Set of existing "signatures" for fast lookup
+  // Signature format: "YYYY-MM-DD|PlayerName|Coach"
+  var existingSignatures = new Set(
+    existingData.map(function (row) {
+      var sheetDate = row[0];
+      var dateString = "";
+
+      // Format the date from the sheet to match the HTML date input (YYYY-MM-DD)
+      if (sheetDate instanceof Date) {
+        dateString = Utilities.formatDate(sheetDate, timezone, "yyyy-MM-dd");
+      } else {
+        dateString = String(sheetDate).trim();
+      }
+
+      return (
+        dateString + "|" + String(row[1]).trim() + "|" + String(row[2]).trim()
+      );
+    }),
+  );
+
+  // 3. Filter the incoming records
+  var newRows = [];
+  records.forEach(function (record) {
+    var signature =
+      record.date + "|" + record.name.trim() + "|" + record.coach.trim();
+
+    // Only add to newRows if this signature doesn't already exist in the sheet
+    if (!existingSignatures.has(signature)) {
+      newRows.push([record.date, record.name, record.coach, "Present"]);
+      // Add it to the set so we don't add duplicates within the same submission batch
+      existingSignatures.add(signature);
+    }
+  });
+
+  // 4. Append only the new, unique rows
+  if (newRows.length > 0) {
+    // We use sheet.getLastRow() again just in case someone else added a row while this script was running
+    sheet
+      .getRange(sheet.getLastRow() + 1, 1, newRows.length, newRows[0].length)
+      .setValues(newRows);
+    return "Successfully added " + newRows.length + " new attendance records.";
+  } else {
+    return "No new records added. All selected athletes were already marked present for this date and coach.";
+  }
+}
+
