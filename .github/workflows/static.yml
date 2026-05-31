@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Delete Antigravity
-        shell: rm -rf ./.antigravitycli 2>&1 > /dev/null
+        run: rm -rf ./.antigravitycli 2>&1 > /dev/null
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
