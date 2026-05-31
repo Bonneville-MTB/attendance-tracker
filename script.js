@@ -199,6 +199,12 @@ function backToAttendance() {
 }
 
 function submitData() {
+  const pinVal = document.getElementById("coachPin").value;
+  if (!pinVal) {
+    alert("Please enter your Coach PIN to submit attendance.");
+    return;
+  }
+
   const btn = document.getElementById("submitBtn");
   btn.disabled = true;
   btn.textContent = "Submitting...";
@@ -223,7 +229,7 @@ function submitData() {
     headers: {
       "Content-Type": "text/plain;charset=utf-8",
     },
-    body: JSON.stringify({ records: records }),
+    body: JSON.stringify({ records: records, pin: pinVal, coachName: selectedCoach.name }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -236,6 +242,7 @@ function submitData() {
       document.getElementById("trailName").value = "";
       document.getElementById("rideMiles").value = "";
       document.getElementById("rideElevation").value = "";
+      document.getElementById("coachPin").value = "";
       btn.disabled = false;
       btn.textContent = "Submit Attendance";
       showScreen("screen-coach");

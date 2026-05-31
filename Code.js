@@ -30,6 +30,9 @@ function doPost(e) {
       throw new Error("Invalid payload: 'records' must be an array.");
     }
     
+    // Verify the Coach PIN
+    verifyCoachPin(requestData.coachName, requestData.pin);
+    
     // Call your existing function
     var resultMessage = submitAttendance(requestData.records);
     
@@ -42,6 +45,31 @@ function doPost(e) {
     return ContentService.createTextOutput(JSON.stringify({ success: false, message: err.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function verifyCoachPin(coachName, pin) {
+  if (!coachName || !pin) {
+    throw new Error("Coach name and PIN are required.");
+  }
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var coachSheet = ss.getSheetByName("Coaches");
+  // Assuming Name is Col A, Default Group is Col B, Inactive is Col C, PIN is Col D
+  var coachData = coachSheet
+    .getRange(2, 1, coachSheet.getLastRow() - 1, 4) 
+    .getValues();
+  
+  for (var i = 0; i < coachData.length; i++) {
+    var name = coachData[i][0];
+    var storedPin = coachData[i][3]; // Column D
+    if (name === coachName) {
+      if (storedPin !== "" && String(storedPin).trim() === String(pin).trim()) {
+        return true;
+      } else {
+        throw new Error("Invalid PIN for coach: " + coachName);
+      }
+    }
+  }
+  throw new Error("Coach not found: " + coachName);
 }
 
 // Helper function to include separate HTML/JS files
