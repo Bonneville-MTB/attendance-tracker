@@ -1,3 +1,4 @@
+(function() {
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyE988X78Niss2y3kOiH93B3maT-vvrJr4ql85_3WiCLriTUqeWIoSSINlJ4kbSvjVM/exec";
 
@@ -101,6 +102,12 @@ function startAttendance() {
 
   renderAthleteList();
   showScreen("screen-attendance");
+}
+
+let debounceTimer;
+function onSearchChange() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(renderAthleteList, 300);
 }
 
 function renderAthleteList() {
@@ -240,3 +247,16 @@ function showScreen(id) {
     .forEach((el) => el.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
+
+  window.startAttendance = startAttendance;
+  window.renderAthleteList = renderAthleteList;
+  window.onSearchChange = onSearchChange;
+  window.markAll = markAll;
+  window.clearSelection = clearSelection;
+  window.addToRoster = addToRoster;
+  window.goToReview = goToReview;
+  window.renderReviewList = renderReviewList;
+  window.removeFromRoster = removeFromRoster;
+  window.backToAttendance = backToAttendance;
+  window.submitData = submitData;
+})();
