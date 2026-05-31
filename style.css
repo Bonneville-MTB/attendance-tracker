@@ -1,0 +1,97 @@
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f6f8;
+  color: #333;
+}
+h2 {
+  color: #202124;
+  margin-top: 0;
+}
+.screen {
+  display: none;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+.screen.active {
+  display: block;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+select,
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+}
+button.secondary {
+  background-color: #f1f3f4;
+  color: #1a73e8;
+  border: 1px solid #1a73e8;
+}
+button.danger {
+  background-color: #ea4335;
+  margin-top: 5px;
+  padding: 8px;
+  font-size: 14px;
+}
+.athlete-item,
+.review-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.athlete-item:last-child,
+.review-item:last-child {
+  border-bottom: none;
+}
+.athlete-item input[type="checkbox"] {
+  transform: scale(1.5);
+  margin-right: 15px;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+}
+.filters > div {
+  flex: 1;
+}
+#loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+.badge {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
