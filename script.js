@@ -200,8 +200,10 @@ function submitData() {
   btn.textContent = "Submitting...";
   const dateVal = document.getElementById("attendanceDate").value;
   const trailVal = document.getElementById("trailName").value;
-  const milesVal = document.getElementById("rideMiles").value;
-  const elevationVal = document.getElementById("rideElevation").value;
+  const rawMiles = document.getElementById("rideMiles").value;
+  const milesVal = rawMiles ? parseFloat(rawMiles) : "";
+  const rawElevation = document.getElementById("rideElevation").value;
+  const elevationVal = rawElevation ? parseInt(rawElevation, 10) : "";
 
   const records = tempRoster.map((name) => ({
     date: dateVal,
