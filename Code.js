@@ -1,5 +1,5 @@
 // API Backend for Attendance Tracker
-var TEAM_PASSWORD = "SHRED";
+var TEAM_PASSWORD = PropertiesService.getScriptProperties().getProperty("TEAM_PASSWORD");
 
 function doGet(e) {
   // 1. Check if this is an API request for initial data

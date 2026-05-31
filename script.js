@@ -1,6 +1,6 @@
 (function() {
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbyE988X78Niss2y3kOiH93B3maT-vvrJr4ql85_3WiCLriTUqeWIoSSINlJ4kbSvjVM/exec";
+  "https://script.google.com/macros/s/AKfycby_h-KPf0X7CRk0lgbZ_nfHakJAlCgkRCMXOqh3AAoWttJ8feRiym3v2t8NGXp0i9eo/exec";
 
 // Global Variables
 let appData = {};
