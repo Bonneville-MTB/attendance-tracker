@@ -1,8 +1,13 @@
 // API Backend for Attendance Tracker
+var TEAM_PASSWORD = "SHRED";
+
 function doGet(e) {
   // 1. Check if this is an API request for initial data
   if (e && e.parameter && e.parameter.action === 'getInitialData') {
     try {
+      if (e.parameter.password !== TEAM_PASSWORD) {
+        throw new Error("Incorrect team password.");
+      }
       var data = getInitialData();
       return ContentService.createTextOutput(JSON.stringify(data))
         .setMimeType(ContentService.MimeType.JSON);

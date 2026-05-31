@@ -25,39 +25,31 @@ window.onload = function () {
 
   document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
 
-  let loadingTimeout = setTimeout(function () {
-    const loadingEl = document.getElementById("loading");
-    if (loadingEl) {
-      loadingEl.innerHTML =
-        "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
-        "<h3>Access Denied or Timeout</h3>" +
-        "<p>We could not load the data from the spreadsheet.</p>" +
-        "<p>This usually happens if you do not have permission to access the underlying spreadsheet.</p>" +
-        "<p>Please make sure you are logged into the correct Google account, or ask an administrator for access.</p>" +
-        "</div>";
-    }
-  }, 8000); // 8 seconds timeout
+  showScreen("screen-login");
+};
 
-  fetch(API_URL + "?action=getInitialData")
+function unlockApp() {
+  const teamPassword = document.getElementById("teamPassword").value;
+  if (!teamPassword) {
+    document.getElementById("loginError").textContent = "Please enter the team password.";
+    return;
+  }
+  
+  document.getElementById("loginError").style.color = "#333";
+  document.getElementById("loginError").textContent = "Loading data...";
+
+  fetch(API_URL + "?action=getInitialData&password=" + encodeURIComponent(teamPassword))
     .then((response) => response.json())
     .then((data) => {
-      clearTimeout(loadingTimeout);
       if (data.error) {
         throw new Error(data.error);
       }
+      document.getElementById("loginError").textContent = "";
       initApp(data);
     })
     .catch((error) => {
-      clearTimeout(loadingTimeout);
-      document.getElementById("loading").innerHTML =
-        "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
-        "<h3>Access Denied</h3>" +
-        "<p>You do not have permission to access the underlying spreadsheet.</p>" +
-        "<p>Please make sure you are logged into the correct Google account, or ask an administrator for access.</p>" +
-        "<p style='font-size: 0.8em; margin-top: 10px; color: #666;'>Error details: " +
-        error.message +
-        "</p>" +
-        "</div>";
+      document.getElementById("loginError").style.color = "#ea4335";
+      document.getElementById("loginError").textContent = error.message;
     });
 };
 
@@ -80,7 +72,7 @@ function initApp(data) {
     levelSelect.appendChild(opt);
   });
 
-  document.getElementById("loading").style.display = "none";
+  // loading element removed
   showScreen("screen-coach");
 }
 
@@ -272,4 +264,5 @@ function showScreen(id) {
   window.removeFromRoster = removeFromRoster;
   window.backToAttendance = backToAttendance;
   window.submitData = submitData;
+  window.unlockApp = unlockApp;
 })();

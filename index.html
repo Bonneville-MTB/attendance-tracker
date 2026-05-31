@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="loading">Loading data from spreadsheet...</div>
+    <!-- SCREEN 0: Gatekeeper Login -->
+    <div id="screen-login" class="screen active">
+      <h2>Team Access</h2>
+      <p>Please enter the shared team password to continue.</p>
+      <input type="password" id="teamPassword" placeholder="Team Password" />
+      <button onclick="unlockApp()">Unlock</button>
+      <div id="loginError" style="color: #ea4335; margin-top: 10px;"></div>
+    </div>
 
     <!-- SCREEN 1: Select Coach -->
     <div id="screen-coach" class="screen">
