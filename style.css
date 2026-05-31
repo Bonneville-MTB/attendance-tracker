@@ -95,3 +95,45 @@ button.danger {
   border-radius: 12px;
   font-size: 12px;
 }
+
+/* New classes extracted from inline HTML styles */
+.list-container {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.action-buttons button {
+  margin-bottom: 0;
+}
+
+.ride-details {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+.ride-details h3 {
+  margin-top: 0;
+}
+.ride-details .trail-input {
+  margin-bottom: 10px;
+}
+.ride-details-row {
+  display: flex;
+  gap: 10px;
+}
+.ride-details-col {
+  flex: 1;
+}
+.ride-details-col input[type="number"] {
+  margin-bottom: 0;
+}

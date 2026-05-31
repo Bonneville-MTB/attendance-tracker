@@ -130,6 +130,7 @@ function renderAthleteList() {
     return;
   }
 
+  const fragment = document.createDocumentFragment();
   filtered.forEach((a) => {
     const div = document.createElement("div");
     div.className = "athlete-item";
@@ -138,8 +139,9 @@ function renderAthleteList() {
         <input type="checkbox" value="${escapeHTML(a.name)}">
         <span>${escapeHTML(a.name)} <span class="badge">${escapeHTML(a.level)}</span></span>
       </label>`;
-    listDiv.appendChild(div);
+    fragment.appendChild(div);
   });
+  listDiv.appendChild(fragment);
 }
 
 function markAll() {
@@ -175,12 +177,14 @@ function goToReview() {
 function renderReviewList() {
   const listDiv = document.getElementById("reviewList");
   listDiv.innerHTML = "";
+  const fragment = document.createDocumentFragment();
   tempRoster.forEach((name, index) => {
     const div = document.createElement("div");
     div.className = "review-item";
     div.innerHTML = `<span>${escapeHTML(name)}</span><button class="danger" onclick="removeFromRoster(${index})">Remove</button>`;
-    listDiv.appendChild(div);
+    fragment.appendChild(div);
   });
+  listDiv.appendChild(fragment);
 }
 
 function removeFromRoster(index) {

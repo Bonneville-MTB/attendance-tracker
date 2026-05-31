@@ -43,29 +43,16 @@
         </div>
       </div>
 
-      <div
-        id="athleteList"
-        style="
-          margin-bottom: 20px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          max-height: 300px;
-          overflow-y: auto;
-        "
-      >
+      <div id="athleteList" class="list-container">
         <!-- Athletes will be injected here -->
       </div>
 
       <!-- NEW BUTTONS HERE -->
-      <div style="display: flex; gap: 10px; margin-bottom: 15px">
-        <button class="secondary" onclick="markAll()" style="margin-bottom: 0">
+      <div class="action-buttons">
+        <button class="secondary" onclick="markAll()">
           Mark All
         </button>
-        <button
-          class="secondary"
-          onclick="clearSelection()"
-          style="margin-bottom: 0"
-        >
+        <button class="secondary" onclick="clearSelection()">
           Clear Selection
         </button>
       </div>
@@ -83,32 +70,23 @@
       <p><strong>Coach:</strong> <span id="reviewCoach"></span></p>
       <p><strong>Date:</strong> <span id="reviewDate"></span></p>
 
-      <div
-        id="reviewList"
-        style="
-          margin-bottom: 20px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          max-height: 300px;
-          overflow-y: auto;
-        "
-      >
+      <div id="reviewList" class="list-container">
         <!-- Selected athletes will be injected here -->
       </div>
 
-      <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9;">
-        <h3 style="margin-top: 0;">Ride Details (Optional)</h3>
+      <div class="ride-details">
+        <h3>Ride Details (Optional)</h3>
         <label for="trailName">Trail Name:</label>
-        <input type="text" id="trailName" placeholder="e.g. Bonneville Shoreline" style="margin-bottom: 10px;" />
+        <input type="text" id="trailName" class="trail-input" placeholder="e.g. Bonneville Shoreline" />
 
-        <div style="display: flex; gap: 10px;">
-          <div style="flex: 1;">
+        <div class="ride-details-row">
+          <div class="ride-details-col">
             <label for="rideMiles">Miles:</label>
-            <input type="number" id="rideMiles" placeholder="e.g. 10.5" step="0.1" min="0" style="margin-bottom: 0;" />
+            <input type="number" id="rideMiles" placeholder="e.g. 10.5" step="0.1" min="0" />
           </div>
-          <div style="flex: 1;">
+          <div class="ride-details-col">
             <label for="rideElevation">Elevation Gain (ft):</label>
-            <input type="number" id="rideElevation" placeholder="e.g. 1200" step="1" min="0" style="margin-bottom: 0;" />
+            <input type="number" id="rideElevation" placeholder="e.g. 1200" step="1" min="0" />
           </div>
         </div>
       </div>
