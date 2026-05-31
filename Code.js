@@ -1,8 +1,41 @@
-function doGet() {
+function doGet(e) {
+  // 1. Check if this is an API request for initial data
+  if (e && e.parameter && e.parameter.action === 'getInitialData') {
+    try {
+      var data = getInitialData();
+      return ContentService.createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
+    } catch (err) {
+      return ContentService.createTextOutput(JSON.stringify({ error: err.message }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
+  // 2. Otherwise, serve the standard web app HTML (keeps your existing app working during the transition!)
   return HtmlService.createTemplateFromFile("index")
     .evaluate()
     .setTitle("MTB Attendance Tracker")
     .addMetaTag("viewport", "width=device-width, initial-scale=1"); // Ensures mobile responsiveness
+}
+
+// Handle POST requests from the new GitHub frontend
+function doPost(e) {
+  try {
+    // Parse the incoming JSON data from the fetch() request
+    var requestData = JSON.parse(e.postData.contents);
+    
+    // Call your existing function
+    var resultMessage = submitAttendance(requestData.records);
+    
+    // Return success response
+    return ContentService.createTextOutput(JSON.stringify({ success: true, message: resultMessage }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (err) {
+    // Return error response
+    return ContentService.createTextOutput(JSON.stringify({ success: false, message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 // Helper function to include separate HTML/JS files
