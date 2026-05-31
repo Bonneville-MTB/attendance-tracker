@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwDM917huPaCxMhMB2TCsnKRSiTDIgtj9VzDWNYsgDSIkjQFwb-8F-iM4xBDX9QF-3E/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxP0pHRcunmj3UyB37vjsQS7-YmbjqSg9TARcvklXpFBwyeREGYiG09cieTP9R1I3dN/exec";
 
 // Global Variables
 let appData = {};
