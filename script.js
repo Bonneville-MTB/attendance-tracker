@@ -1,4 +1,5 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxP0pHRcunmj3UyB37vjsQS7-YmbjqSg9TARcvklXpFBwyeREGYiG09cieTP9R1I3dN/exec";
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbxP0pHRcunmj3UyB37vjsQS7-YmbjqSg9TARcvklXpFBwyeREGYiG09cieTP9R1I3dN/exec";
 
 // Global Variables
 let appData = {};
@@ -14,10 +15,10 @@ window.onload = function () {
 
   document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
 
-  let loadingTimeout = setTimeout(function() {
+  let loadingTimeout = setTimeout(function () {
     const loadingEl = document.getElementById("loading");
     if (loadingEl) {
-      loadingEl.innerHTML = 
+      loadingEl.innerHTML =
         "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
         "<h3>Access Denied or Timeout</h3>" +
         "<p>We could not load the data from the spreadsheet.</p>" +
@@ -28,22 +29,24 @@ window.onload = function () {
   }, 8000); // 8 seconds timeout
 
   fetch(API_URL + "?action=getInitialData")
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       clearTimeout(loadingTimeout);
       if (data.error) {
         throw new Error(data.error);
       }
       initApp(data);
     })
-    .catch(error => {
+    .catch((error) => {
       clearTimeout(loadingTimeout);
-      document.getElementById("loading").innerHTML = 
+      document.getElementById("loading").innerHTML =
         "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
         "<h3>Access Denied</h3>" +
         "<p>You do not have permission to access the underlying spreadsheet.</p>" +
         "<p>Please make sure you are logged into the correct Google account, or ask an administrator for access.</p>" +
-        "<p style='font-size: 0.8em; margin-top: 10px; color: #666;'>Error details: " + error.message + "</p>" +
+        "<p style='font-size: 0.8em; margin-top: 10px; color: #666;'>Error details: " +
+        error.message +
+        "</p>" +
         "</div>";
     });
 };
@@ -83,9 +86,7 @@ function startAttendance() {
   const levelFilter = document.getElementById("levelFilter");
   levelFilter.value =
     selectedCoach.defaultGroup &&
-    [...levelFilter.options].some(
-      (o) => o.value == selectedCoach.defaultGroup,
-    )
+    [...levelFilter.options].some((o) => o.value == selectedCoach.defaultGroup)
       ? selectedCoach.defaultGroup
       : "All";
 
@@ -97,9 +98,7 @@ function renderAthleteList() {
   const listDiv = document.getElementById("athleteList");
   listDiv.innerHTML = "";
   const filterLevel = document.getElementById("levelFilter").value;
-  const filterName = document
-    .getElementById("nameSearch")
-    .value.toLowerCase();
+  const filterName = document.getElementById("nameSearch").value.toLowerCase();
 
   const filtered = appData.athletes.filter((a) => {
     const matchesLevel =
@@ -194,7 +193,7 @@ function submitData() {
     coach: selectedCoach.name,
     trail: trailVal,
     miles: milesVal,
-    elevation: elevationVal
+    elevation: elevationVal,
   }));
 
   fetch(API_URL, {
