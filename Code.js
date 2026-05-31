@@ -1,3 +1,4 @@
+// API Backend for Attendance Tracker
 function doGet(e) {
   // 1. Check if this is an API request for initial data
   if (e && e.parameter && e.parameter.action === 'getInitialData') {
