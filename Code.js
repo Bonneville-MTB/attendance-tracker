@@ -11,19 +11,25 @@ function include(filename) {
 }
 
 function getInitialData() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) {
+      throw new Error("You do not have permission to access the underlying spreadsheet.");
+    }
 
   // Fetch Coaches
   var coachSheet = ss.getSheetByName("Coaches");
   var coachData = coachSheet
-    .getRange(2, 1, coachSheet.getLastRow() - 1, 2)
+    .getRange(2, 1, coachSheet.getLastRow() - 1, 3)
     .getValues();
   var coaches = coachData
+    .filter(function (row) {
+      // row[0] is Name, row[2] is Inactive (Column C)
+      // We want to keep coaches that have a name AND are NOT marked as inactive
+      return row[0] !== "" && row[2] !== true;
+    })
     .map(function (row) {
       return { name: row[0], defaultGroup: row[1] };
-    })
-    .filter(function (c) {
-      return c.name !== "";
     });
 
   // Fetch Athletes
@@ -47,6 +53,9 @@ function getInitialData() {
     athletes: athletes,
     levels: levels,
   };
+  } catch (e) {
+    throw new Error("Spreadsheet access error: " + e.message);
+  }
 }
 
 function submitAttendance(records) {
@@ -91,7 +100,15 @@ function submitAttendance(records) {
 
     // Only add to newRows if this signature doesn't already exist in the sheet
     if (!existingSignatures.has(signature)) {
-      newRows.push([record.date, record.name, record.coach, "Present"]);
+      newRows.push([
+        record.date, 
+        record.name, 
+        record.coach, 
+        "Present", 
+        record.trail || "", 
+        record.miles || "", 
+        record.elevation || ""
+      ]);
       // Add it to the set so we don't add duplicates within the same submission batch
       existingSignatures.add(signature);
     }

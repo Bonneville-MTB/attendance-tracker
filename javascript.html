@@ -13,7 +13,35 @@
 
     document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
 
-    google.script.run.withSuccessHandler(initApp).getInitialData();
+    let loadingTimeout = setTimeout(function() {
+      const loadingEl = document.getElementById("loading");
+      if (loadingEl) {
+        loadingEl.innerHTML = 
+          "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
+          "<h3>Access Denied or Timeout</h3>" +
+          "<p>We could not load the data from the spreadsheet.</p>" +
+          "<p>This usually happens if you do not have permission to access the underlying spreadsheet.</p>" +
+          "<p>Please make sure you are logged into the correct Google account, or ask an administrator for access.</p>" +
+          "</div>";
+      }
+    }, 8000); // 8 seconds timeout
+
+    google.script.run
+      .withSuccessHandler(function(data) {
+        clearTimeout(loadingTimeout);
+        initApp(data);
+      })
+      .withFailureHandler(function(error) {
+        clearTimeout(loadingTimeout);
+        document.getElementById("loading").innerHTML = 
+          "<div style='color: #d32f2f; padding: 20px; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; border-radius: 4px; margin: 20px;'>" +
+          "<h3>Access Denied</h3>" +
+          "<p>You do not have permission to access the underlying spreadsheet.</p>" +
+          "<p>Please make sure you are logged into the correct Google account, or ask an administrator for access.</p>" +
+          "<p style='font-size: 0.8em; margin-top: 10px; color: #666;'>Error details: " + error.message + "</p>" +
+          "</div>";
+      })
+      .getInitialData();
   };
 
   function initApp(data) {
@@ -152,10 +180,17 @@
     btn.disabled = true;
     btn.textContent = "Submitting...";
     const dateVal = document.getElementById("attendanceDate").value;
+    const trailVal = document.getElementById("trailName").value;
+    const milesVal = document.getElementById("rideMiles").value;
+    const elevationVal = document.getElementById("rideElevation").value;
+
     const records = tempRoster.map((name) => ({
       date: dateVal,
       name: name,
       coach: selectedCoach.name,
+      trail: trailVal,
+      miles: milesVal,
+      elevation: elevationVal
     }));
 
     google.script.run
@@ -163,6 +198,9 @@
         alert(res);
         tempRoster = [];
         document.getElementById("rosterCount").textContent = "0";
+        document.getElementById("trailName").value = "";
+        document.getElementById("rideMiles").value = "";
+        document.getElementById("rideElevation").value = "";
         btn.disabled = false;
         btn.textContent = "Submit Attendance";
         showScreen("screen-coach");
