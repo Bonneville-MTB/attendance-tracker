@@ -6,6 +6,15 @@ let appData = {};
 let selectedCoach = null;
 let tempRoster = [];
 
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 window.onload = function () {
   // Get the exact local date and format it as YYYY-MM-DD
   const today = new Date();
@@ -119,8 +128,8 @@ function renderAthleteList() {
     div.className = "athlete-item";
     div.innerHTML = `
       <label style="display:flex; align-items:center; margin:0; width:100%; cursor:pointer;">
-        <input type="checkbox" value="${a.name}">
-        <span>${a.name} <span class="badge">${a.level}</span></span>
+        <input type="checkbox" value="${escapeHTML(a.name)}">
+        <span>${escapeHTML(a.name)} <span class="badge">${escapeHTML(a.level)}</span></span>
       </label>`;
     listDiv.appendChild(div);
   });
@@ -162,7 +171,7 @@ function renderReviewList() {
   tempRoster.forEach((name, index) => {
     const div = document.createElement("div");
     div.className = "review-item";
-    div.innerHTML = `<span>${name}</span><button class="danger" onclick="removeFromRoster(${index})">Remove</button>`;
+    div.innerHTML = `<span>${escapeHTML(name)}</span><button class="danger" onclick="removeFromRoster(${index})">Remove</button>`;
     listDiv.appendChild(div);
   });
 }
